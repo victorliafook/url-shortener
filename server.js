@@ -35,18 +35,17 @@ app.get(urlPattern, function(req, res){
         console.log(doc);
         if(doc){
             console.log("it already was in database! " + doc.url);
-            res.json(new ReturnObj(req, doc.url));
             inDb = true;
+            res.json(new ReturnObj(req, doc.url));
             return;
         }
         
+        collection.insertOne({url: par, hash: returnHexHash(par)}, function(err, doc){
+            if(err) console.log(err);
+            res.json(new ReturnObj(req, par));
+        });
     });
-    if(inDb) return;
-        
-    collection.insertOne({url: par, hash: returnHexHash(par)}, function(err, doc){
-        if(err) console.log(err);
-        res.json(new ReturnObj(req, par));
-    });
+    
 });
 
 app.get(hashPattern, function(req, res){
