@@ -2,7 +2,7 @@ var express = require('express');
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 var jsHashCode = require('./js-hash-code');
-const url = 'mongodb://localhost:27017/learnyoumongo';
+const url = 'mongodb://localhost:27017/urlshortener';
 
 var app = express();
 
@@ -11,7 +11,7 @@ jsHashCode();
 
 //regex pattern to route the urls to be minified
 const urlPattern = /^\/(http:\/\/(?:www\.)?\w+\.\w{2,6}(?:\.\w{2})?)$/;
-const hashPattern = /^\/(-?[0-9abcdefABCDEF]{8})$/;
+const hashPattern = /^\/(-?[0-9abcdefABCDEF]{3,8})$/;
 var collection;
 
 mongodb.connect(url, function(err, db) {
