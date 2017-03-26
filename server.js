@@ -2,10 +2,11 @@ var express = require('express');
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 var jsHashCode = require('./js-hash-code');
-//const url = 'mongodb://localhost:27017/urlshortener';
-const url = process.env.MONGOLAB_URI;
+
 
 var app = express();
+//const url = 'mongodb://localhost:27017/urlshortener';
+const url = process.env.MONGOLAB_URI;
 
 //provides String.prototype with hashCode  method.
 jsHashCode();
@@ -26,18 +27,22 @@ mongodb.connect(url, function(err, db) {
 
 app.get(urlPattern, function(req, res){
     console.log("is a valid url");
+    var inDb = false;
     var par = req.params[0];
-    //console.log(req);
+    
     collection.findOne({url: par}, function(err, doc){
         if(err) console.log(err);
         console.log(doc);
         if(doc){
             console.log("it already was in database! " + doc.url);
             res.json(new ReturnObj(req, doc.url));
+            inDb = true;
             return;
         }
         
     });
+    if(inDb) return;
+        
     collection.insertOne({url: par, hash: returnHexHash(par)}, function(err, doc){
         if(err) console.log(err);
         res.json(new ReturnObj(req, par));
