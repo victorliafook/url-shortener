@@ -2,7 +2,8 @@ var express = require('express');
 var mongodb = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 var jsHashCode = require('./js-hash-code');
-const url = 'mongodb://localhost:27017/urlshortener';
+//const url = 'mongodb://localhost:27017/urlshortener';
+const url = process.env.MONGOLAB_URI;
 
 var app = express();
 
